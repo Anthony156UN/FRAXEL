@@ -93,35 +93,35 @@
 
   // El video real de Anthony aparece sólo al llegar a Sobre mí. Termina y queda congelado.
   const video = query('#anthony-video');
-  if (video) {
-    let alreadyPlayed = false;
-    const mobileVideo = window.matchMedia('(max-width:760px)').matches;
-    const source = mobileVideo ? video.dataset.mobile : video.dataset.desktop;
-    if (!reduceMotion && source) {
+  if (video && !reduceMotion) {
+    const mobileLayout = window.matchMedia('(max-width:760px)');
+    let observer;
+    const selectVideo = () => {
+      observer?.disconnect();
+      const source = mobileLayout.matches ? video.dataset.mobile : video.dataset.desktop;
+      video.classList.remove('is-playing', 'is-finished');
       video.src = source;
       video.load();
       const playOnce = () => {
-        if (alreadyPlayed) return;
-        alreadyPlayed = true;
-        video.play().then(() => video.classList.add('is-playing')).catch(() => {
-          // Si el navegador bloquea video, el fotograma final queda visible como imagen.
-          video.classList.remove('is-playing');
-        });
+        video.play().then(() => {
+          if (video.getAttribute('src') === source && !video.ended) video.classList.add('is-playing');
+        }).catch(() => {});
       };
       if ('IntersectionObserver' in window) {
-        const videoObserver = new IntersectionObserver((entries, observer) => {
-          if (entries.some(entry => entry.isIntersecting)) {
-            playOnce(); observer.disconnect();
-          }
+        observer = new IntersectionObserver((entries, current) => {
+          if (current !== observer || !entries.some(entry => entry.isIntersecting)) return;
+          current.disconnect();
+          playOnce();
         }, { threshold: 0.38 });
-        videoObserver.observe(query('.about-media'));
+        observer.observe(query('.about-media'));
       } else playOnce();
-      video.addEventListener('ended', () => {
-        video.classList.remove('is-playing');
-        video.classList.add('is-finished');
-        video.pause();
-      });
-    }
+    };
+    video.addEventListener('ended', () => {
+      video.classList.remove('is-playing');
+      video.classList.add('is-finished');
+    });
+    mobileLayout.addEventListener('change', selectVideo);
+    selectVideo();
   }
 
   // Línea de progreso en la sección del proceso.
