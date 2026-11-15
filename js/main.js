@@ -5,8 +5,6 @@
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const query = (selector) => document.querySelector(selector);
   const all = (selector) => Array.from(document.querySelectorAll(selector));
-  const WA_NUMBER = '51902707751';
-  const makeWhatsAppUrl = (message) => `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
 
   // Mantener el año correcto sin mantenimiento manual.
   const year = query('#year');
@@ -62,17 +60,6 @@
     }
   });
 
-  // CTA inteligente: al seleccionar un plan, WhatsApp sabe qué plan interesa.
-  const contactWhatsApp = query('#contact-whatsapp');
-  all('[data-plan]').forEach(link => {
-    link.addEventListener('click', () => {
-      const plan = link.dataset.plan;
-      const greeting = plan === 'Tu idea'
-        ? 'Hola, FRAXEL. Tengo una idea para un proyecto web personalizado y me gustaría contarles de qué se trata.'
-        : `Hola, FRAXEL. Me interesa el plan ${plan}. ¿Podrían contarme más detalles y orientarme con una cotización?`;
-      if (contactWhatsApp) contactWhatsApp.href = makeWhatsAppUrl(greeting);
-    });
-  });
   const sectionLinks = all('.main-nav a, .bottom-nav a');
   const ids = ['inicio', 'nosotros', 'beneficios', 'planes', 'portafolio', 'proceso', 'preguntas', 'contacto'];
   if ('IntersectionObserver' in window) {

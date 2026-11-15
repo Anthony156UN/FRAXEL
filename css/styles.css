@@ -409,3 +409,15 @@ h3 {font-weight:700;font-size:clamp(1.3rem,1.5vw,1.75rem)}
   .motion-ready .reveal:not(.is-visible) {opacity:1;transform:none}
   .steps-progress span {transform:scale(1)}
 }
+
+.fayin-feature {max-width:960px;margin:auto;display:grid;grid-template-columns:1.1fr 1fr;align-items:center}
+.fayin-feature .portfolio-image {display:block;height:100%;aspect-ratio:auto;min-height:200px}
+.fayin-copy {padding:clamp(24px,4vw,48px);display:grid;justify-items:start;gap:16px}
+.fayin-copy h3 {font-size:clamp(1.75rem,3vw,2.6rem);line-height:1.1}
+.fayin-copy p {margin:0}
+@media (max-width:760px) {
+  .floating-whatsapp {display:none}
+  .fayin-feature {grid-template-columns:1fr}
+  .fayin-feature .portfolio-image {height:auto;aspect-ratio:2/1;min-height:0}
+  .bottom-nav a:last-child {color:#80e9a6}
+}
